@@ -1,0 +1,128 @@
+%\documentclass[10pt,a4paper]{report}
+\documentclass[11pt,twoside,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\begin{document}
+\begin{center}
+Image Processing - Pattern recognition and drone controlling with OpenCV",
+Gabriel Hidasy, HIRWAAT.PTE
+\end{center}
+
+\section{The Problem}
+\paragraph {In} the context of this project a drone is an unmanned aerial
+vehicle, capable of hover, particularly a Quad-copter.
+\paragraph {Drones} can be controlled remotely by a human or by an autonomous
+program,this project aims to produce a framework for controlling the drone from
+a computer and integrate it with a pattern recognition algorithm to follow the
+pattern in a room. This project does not aim to guarantee an stable flight
+but the modular nature of it makes it easy to integrate it in another program.
+
+\section{The equipment}
+\paragraph {The} quad-copter used in this project is a Parrot AR-Drone 2.0, the
+drone has a front facing camera and is controlled by WiFi.
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.99\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{drone.jpg}
+\end{subfigure}
+\end{figure}
+
+\paragraph {} The controlling application is written in JavaScript and tested
+in a notebook and an ARM board (that has the added advantage of being light
+enough to be carried by the drone, enabling long range autonomous flights)
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.99\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{odroid.jpg}
+\end{subfigure}
+\end{figure}
+
+\section{The solution}
+\paragraph {} The solution is divided in 2 independent modules, a controlling
+application that communicates with the drone and the pattern matcher that
+finds the pattern and gives commands to the controller, this applications
+communicate through a web interface and do not need to be hosted in the same
+machine.
+\paragraph {} The controlling application is based in a NodeJS library that
+handles the low level communication, it exports a series of URLs that correspond
+to various functions of the drone.\\More then one application can access this
+API at a time, there are no security features implemented for now, but it
+would not be hard to add an authorization token.
+\paragraph {} The functions available in the API are:
+\begin{itemize}
+\item takeoff
+\item land
+\item up ([speed, optional, default 0.5],[time, optional, default 500ms])
+\item down ([speed, optional, default 0.5],[time, optional, default 500ms])
+\item front ([speed, optional, default 0.5],[time, optional, default 500ms])
+\item back ([speed, optional, default 0.5],[time, optional, default 500ms])
+\item left ([speed, optional, default 0.5],[time, optional, default 500ms])
+\item right ([speed, optional, default 0.5],[time, optional, default 500ms])
+\item rotatel ([speed, optional, default 0.5],[time, optional, default 500ms])
+\item rotater ([speed, optional, default 0.5],[time, optional, default 500ms])
+\item stop
+\item flip
+\item img.jpg (This returns a jpg snapshot from the drone)
+\end{itemize}
+\paragraph {} The functions are exported by a Web API available by accessing
+the URL <IP>:8002/<functionName>. Parameters can be passed by GET or POST, eg:\\
+127.0.0.1:8002/up?speed=0.8\&time=100
+
+\paragraph {} The pattern matching application is composed of:
+\begin{itemize}
+  \item A SURF detector from OpenCV\\
+SURF is responsible for finding key-points in an image. A key-point is a point
+in the image with some robust feature. A robust feature is a detail of an image
+that can be detected even if its scaled, rotated, or slightly deformed.
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{image_marked.jpg}
+\end{subfigure}
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{template_marked.jpg}
+\end{subfigure}
+\end{figure}
+
+
+%Add a photo of the template and the points, with circles
+  \item A FLANN matcher from OpenCV\\
+FLANN is a smart algorithm to find matches in a set of data points, it was used
+in place of an exhaustive search because, despite not being as accurate, it is
+good enough and a lot faster, enabling the algorithm to run in a cheap ARM board
+with low power requirements.
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.99\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{matches.jpg}
+\end{subfigure}
+\end{figure}
+As seem in the image, SURF was applied to a binarized image, this was done as it
+reduce problems related to illumination.
+
+  \item A filter: It is possible to see many imperfect matches, they are
+filtered out by iteratively removing the points farther away from the gravity
+center of the set.
+
+  \item A decision algorithm: A simple algorithm to decide in witch direction
+the drone should move, at this iteration of the project the drone is set to move
+at only 30\% of its speed and move 0.5s at a time.
+\end{itemize}
+
+\begin{verbatim}
+	LAYLA
+\end{verbatim}
+
+\section{The Results}
+\paragraph {} Inserir resultados
+\end{document}

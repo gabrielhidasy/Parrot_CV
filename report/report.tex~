@@ -1,0 +1,165 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\begin{document}
+\begin{center}
+Image Processing - Homework 3, Gabriel Hidasy, HIRWAAT.PTE
+\paragraph{Blending images with pyramids}
+\end{center}
+
+\paragraph{The Problem}
+Gaussian and Laplacian pyramids are key components of many image
+compression technics and are also usefull for some image
+transformations, for example, blending two images together.\\
+Given two images, like the following:\\
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{../image1.jpg}
+  \label{SANO:sub1}
+\end{subfigure}
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{../image2.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\end{figure}\\
+Blend then together using the the Gaussian and the Laplacian
+Pyramids
+\paragraph{The solution}
+This task is pretty straightforward, the Gauss pyramid is just the
+original image, bluerred with a Gaussian blur and scaled down
+multiple times, so that each pixel in a smaller image represent the
+average of the 9 pixels it represents in the bigger image.
+There is a ready made function to descend one level in the pyramid
+in OpenCV. Code to generate a Gaussian pyramid follows
+\begin{verbatim}
+TMP = image.copy();
+GPR = [TMP]
+for i in range(0,6):
+    TMP = cv2.pyrDown(TMP)
+    cv2.imwrite("Pir_G_1_L"+str(i)+".jpg",TMP)
+    GPR1.append(TMP)
+TMP = image2.copy()
+\end{verbatim}
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_G_1_L0.jpg}
+  \label{SANO:sub1}
+\end{subfigure}
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_G_1_L1.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_G_1_L2.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\begin{subfigure}{.2\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_G_1_L3.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\begin{subfigure}{.15\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_G_1_L4.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\begin{subfigure}{.05\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_G_1_L5.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\end{figure}
+\newpage
+The Laplacian pyramid can be done in a similar fashion using the
+laplacian transformation instead of the gauss transformation, but
+it can also be created by subtracting from each level of the gauss
+pyramid the upscaled version of the next (smaller) level
+\begin{verbatim}
+LP = [GPR[5]]
+for i in range(5,0,-1):
+    GE = cv2.pyrUp(GPR[i])
+    print(GE.shape,GPR[i-1].shape)
+    L = cv2.subtract(GPR[i-1],GE)
+    cv2.imwrite("Pir_L_1_L"+str(i)+".jpg",L)
+    LP.append(L)
+\end{verbatim}
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_L_1_L5.jpg}
+  \label{SANO:sub1}
+\end{subfigure}
+\begin{subfigure}{.4\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_L_1_L4.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_L_1_L3.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\begin{subfigure}{.2\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_L_1_L2.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\begin{subfigure}{.15\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_L_1_L1.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\begin{subfigure}{.05\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pir_L_1_L0.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\end{figure}
+\newpage
+If we create the Laplacian pyramids for our two images we can blend
+then together and construct an image that has less obvious edition
+marks
+\begin{verbatim}
+#Blending laplacian piramids
+LS = []
+for la,lb in zip(LP1,LP2):
+    rows,cols,dpt = la.shape
+    ls = np.hstack((la[:,0:cols/2], lb[:,cols/2:]))
+    LS.append(ls)
+
+# reconstructing image
+ls_ = LS[0]
+for i in xrange(1,6):
+    ls_ = cv2.pyrUp(ls_)
+    ls_ = cv2.add(ls_, LS[i])
+\end{verbatim}
+After that in LS[6] we will have our blended image.\\
+Below on the left the result of blending the images using the
+pyramitds, on the right a direct blend
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Pyramid_blending2.jpg}
+  \label{SANO:sub1}
+\end{subfigure}
+\begin{subfigure}{.45\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{../Direct_blending.jpg}
+  \label{SBNO:sub1}
+\end{subfigure}
+\end{figure}
+\end{document}
