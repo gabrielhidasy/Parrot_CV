@@ -72,24 +72,26 @@ would not be hard to add an authorization token.
 \item img.jpg (This returns a jpg snapshot from the drone)
 \end{itemize}
 \paragraph {} The functions are exported by a Web API available by accessing
-the URL <IP>:8002/<functionName>. Parameters can be passed by GET or POST, eg:\\
-127.0.0.1:8002/up?speed=0.8\&time=100
+the URL IP:8002/functionName. Parameters can be passed by GET or POST,
+eg: 127.0.0.1:8002/up?speed=0.8\&time=100
 
 \paragraph {} The pattern matching application is composed of:
 \begin{itemize}
   \item A SURF detector from OpenCV\\
 SURF is responsible for finding key-points in an image. A key-point is a point
 in the image with some robust feature. A robust feature is a detail of an image
-that can be detected even if its scaled, rotated, or slightly deformed.
+that can be detected even if its scaled, rotated, or slightly deformed.\\
+The images bellow have their key-points marked, the first one has a red cross
+marking the position of the pattern in the image.
 \begin{figure}[hbtp]
   \centering
-\begin{subfigure}{.45\textwidth}
+\begin{subfigure}{1.00\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{image_marked.jpg}
+  \includegraphics[width=1.0\linewidth]{image_marked.jpg}
 \end{subfigure}
-\begin{subfigure}{.45\textwidth}
+\begin{subfigure}{1.00\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{template_marked.jpg}
+  \includegraphics[width=1.0\linewidth]{template_marked.jpg}
 \end{subfigure}
 \end{figure}
 
@@ -102,9 +104,9 @@ good enough and a lot faster, enabling the algorithm to run in a cheap ARM board
 with low power requirements.
 \begin{figure}[hbtp]
   \centering
-\begin{subfigure}{.99\textwidth}
+\begin{subfigure}{1.00\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{matches.jpg}
+  \includegraphics[width=1.00\linewidth]{matches.jpg}
 \end{subfigure}
 \end{figure}
 As seem in the image, SURF was applied to a binarized image, this was done as it
@@ -120,15 +122,18 @@ and right), and the size it appears to have (for front and back), at this
 iteration of the project the drone is set to move at only 30\% of its speed
 and move for 0.5s at a time.\\
 The drone stays still when no pattern is detected, in a future iteration it
-could be usefull to have the drone rotating or flying in circles, as it would
-increase the chance it would come accross the pattern changing the point of
+could be useful to have the drone rotating or flying in circles, as it would
+increase the chance it would come across the pattern changing the point of
 view.
 \end{itemize}
-
+\paragraph{} The application process a image in less then 50ms, but the rate is
+limited to 2Hz as its more then enough to control the drone and leave a lot of
+room for both improvements in this application and other applications running in
+the controller (as a flight stabilizer or a GPS tracker).
 
 \section{The Results}
 \paragraph {} In the following 3 pages a log of a test flight is included, it
-consistes of the output from the pattern matcher, to be read as:
+consists of the output from the pattern matcher, to be read as:
 \begin{itemize}
 \item Date
 \item Position (x,y) of the pattern and the geometry of the image
@@ -250,4 +255,7 @@ Wed May 13 14:18:39 CEST 2015
 goright
 \end{verbatim}
 \newpage
+\paragraph{} As seen in the logs the drone correctly reacts to the commands
+sent, further advances need to be made in modulating the force of the response
+based in the position and distance of the target pattern.
 \end{document}

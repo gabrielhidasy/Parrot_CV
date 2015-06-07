@@ -72,24 +72,26 @@ would not be hard to add an authorization token.
 \item img.jpg (This returns a jpg snapshot from the drone)
 \end{itemize}
 \paragraph {} The functions are exported by a Web API available by accessing
-the URL <IP>:8002/<functionName>. Parameters can be passed by GET or POST, eg:\\
-127.0.0.1:8002/up?speed=0.8\&time=100
+the URL IP:8002/functionName. Parameters can be passed by GET or POST,
+eg: 127.0.0.1:8002/up?speed=0.8\&time=100
 
 \paragraph {} The pattern matching application is composed of:
 \begin{itemize}
   \item A SURF detector from OpenCV\\
 SURF is responsible for finding key-points in an image. A key-point is a point
 in the image with some robust feature. A robust feature is a detail of an image
-that can be detected even if its scaled, rotated, or slightly deformed.
+that can be detected even if its scaled, rotated, or slightly deformed.\\
+The images bellow have their keypoints marked, the first one has a red cross
+marking the position of the pattern in the image.
 \begin{figure}[hbtp]
   \centering
-\begin{subfigure}{.45\textwidth}
+\begin{subfigure}{1.00\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{image_marked.jpg}
+  \includegraphics[width=1.0\linewidth]{image_marked.jpg}
 \end{subfigure}
-\begin{subfigure}{.45\textwidth}
+\begin{subfigure}{1.00\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{template_marked.jpg}
+  \includegraphics[width=1.0\linewidth]{template_marked.jpg}
 \end{subfigure}
 \end{figure}
 
@@ -102,27 +104,155 @@ good enough and a lot faster, enabling the algorithm to run in a cheap ARM board
 with low power requirements.
 \begin{figure}[hbtp]
   \centering
-\begin{subfigure}{.99\textwidth}
+\begin{subfigure}{1.00\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{matches.jpg}
+  \includegraphics[width=1.00\linewidth]{matches.jpg}
 \end{subfigure}
 \end{figure}
 As seem in the image, SURF was applied to a binarized image, this was done as it
 reduce problems related to illumination.
 
   \item A filter: It is possible to see many imperfect matches, they are
-filtered out by iteratively removing the points farther away from the gravity
+filtered out by iteractively removing the points farther away from the gravity
 center of the set.
 
   \item A decision algorithm: A simple algorithm to decide in witch direction
-the drone should move, at this iteration of the project the drone is set to move
-at only 30\% of its speed and move 0.5s at a time.
+the drone should move based on where the pattern is found (for up, down, left
+and right), and the size it appears to have (for front and back), at this
+iteration of the project the drone is set to move at only 30\% of its speed
+and move for 0.5s at a time.\\
+The drone stays still when no pattern is detected, in a future iteration it
+could be usefull to have the drone rotating or flying in circles, as it would
+increase the chance it would come accross the pattern changing the point of
+view.
 \end{itemize}
 
-\begin{verbatim}
-	LAYLA
-\end{verbatim}
 
 \section{The Results}
-\paragraph {} Inserir resultados
+\paragraph {} In the following 3 pages a log of a test flight is included, it
+consistes of the output from the pattern matcher, to be read as:
+\begin{itemize}
+\item Date
+\item Position (x,y) of the pattern and the geometry of the image
+\item Log of commands executed
+\end{itemize}
+\paragraph{} At this iteration the pattern matcher was not modulating the speed
+and time for each function. It was also not commanding the drone to go front or
+back.
+\newpage
+\begin{verbatim}
+Wed May 13 14:18:04 CEST 2015
+(371, 268, (640,360))
+goright
+godown
+Wed May 13 14:18:05 CEST 2015
+(367, 268, (640,360))
+godown
+Wed May 13 14:18:09 CEST 2015
+(322, 205, (640,360))
+Wed May 13 14:18:11 CEST 2015
+(459, 251, (640,360))
+goright
+godown
+Wed May 13 14:18:13 CEST 2015
+(292, 303, (640,360))
+godown
+Wed May 13 14:18:14 CEST 2015
+(456, 262, (640,360))
+goright
+godown
+Wed May 13 14:18:14 CEST 2015
+(352, 192, (640,360))
+Wed May 13 14:18:15 CEST 2015
+(429, 145, (640,360))
+goright
+Wed May 13 14:18:16 CEST 2015
+(468, 115, (640,360))
+goright
+goup
+Wed May 13 14:18:16 CEST 2015
+(404, 125, (640,360))
+goright
+goup
+Wed May 13 14:18:17 CEST 2015
+(434, 118, (640,360))
+goright
+goup
+Wed May 13 14:18:19 CEST 2015
+(412, 133, (640,360))
+goright
+Wed May 13 14:18:19 CEST 2015
+(441, 180, (640,360))
+goright
+Wed May 13 14:18:20 CEST 2015
+(418, 274, (640,360))
+goright
+godown
+Wed May 13 14:18:21 CEST 2015
+(425, 217, (640,360))
+goright
+Wed May 13 14:18:21 CEST 2015
+(411, 232, (640,360))
+goright
+godown
+Wed May 13 14:18:22 CEST 2015
+(428, 151, (640,360))
+goright
+Wed May 13 14:18:23 CEST 2015
+(408, 183, (640,360))
+goright
+Wed May 13 14:18:24 CEST 2015
+(423, 136, (640,360))
+goright
+Wed May 13 14:18:25 CEST 2015
+(412, 133, (640,360))
+(403, 78, (640,360))
+goright
+goup
+Wed May 13 14:18:26 CEST 2015
+(367, 81, (640,360))
+goup
+Wed May 13 14:18:28 CEST 2015
+(416, 58, (640,360))
+goright
+goup
+Wed May 13 14:18:29 CEST 2015
+(398, 68, (640,360))
+goright
+goup
+Wed May 13 14:18:31 CEST 2015
+(406, 58, (640,360))
+goright
+goup
+Wed May 13 14:18:33 CEST 2015
+(297, 74, (640,360))
+goup
+Wed May 13 14:18:33 CEST 2015
+(273, 38, (640,360))
+goup
+Wed May 13 14:18:35 CEST 2015
+(312, 52, (640,360))
+goup
+Wed May 13 14:18:35 CEST 2015
+(310, 51, (640,360))
+goup
+Wed May 13 14:18:36 CEST 2015
+(345, 141, (640,360))
+Wed May 13 14:18:37 CEST 2015
+(422, 167, (640,360))
+goright
+Wed May 13 14:18:37 CEST 2015
+(472, 171, (640,360))
+goright
+Wed May 13 14:18:38 CEST 2015
+(524, 149, (640,360))
+goright
+Wed May 13 14:18:39 CEST 2015
+(523, 200, (640,360))
+goright
+\end{verbatim}
+\newpage
+\paragraph{} As seen in the logs the drone correctly reacts to the commands
+sent, further advances need to be made in modulating the force of the response
+based in the position and distance of the target pattern.
 \end{document}
