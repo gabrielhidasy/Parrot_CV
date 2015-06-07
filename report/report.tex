@@ -85,13 +85,17 @@ The images bellow have their key-points marked, the first one has a red cross
 marking the position of the pattern in the image.
 \begin{figure}[hbtp]
   \centering
+SURF
 \begin{subfigure}{1.00\textwidth}
   \centering
   \includegraphics[width=1.0\linewidth]{image_marked.jpg}
+  The size of the circle indicates the confidence in the match, this circles are
+already filtered.
 \end{subfigure}
 \begin{subfigure}{1.00\textwidth}
   \centering
   \includegraphics[width=1.0\linewidth]{template_marked.jpg}
+  The template is a pair of triangles as well marked corners are easy to match.
 \end{subfigure}
 \end{figure}
 
@@ -104,6 +108,7 @@ good enough and a lot faster, enabling the algorithm to run in a cheap ARM board
 with low power requirements.
 \begin{figure}[hbtp]
   \centering
+FLANN
 \begin{subfigure}{1.00\textwidth}
   \centering
   \includegraphics[width=1.00\linewidth]{matches.jpg}
@@ -141,7 +146,8 @@ consists of the output from the pattern matcher, to be read as:
 \end{itemize}
 \paragraph{} At this iteration the pattern matcher was not modulating the speed
 and time for each function. It was also not commanding the drone to go front or
-back.
+back as this section of the code is still not reliable enough for pure
+autonomous flight.
 \newpage
 \begin{verbatim}
 Wed May 13 14:18:04 CEST 2015
@@ -254,7 +260,6 @@ Wed May 13 14:18:39 CEST 2015
 (523, 200, (640,360))
 goright
 \end{verbatim}
-\newpage
 \paragraph{} As seen in the logs the drone correctly reacts to the commands
 sent, further advances need to be made in modulating the force of the response
 based in the position and distance of the target pattern.
