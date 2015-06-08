@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Arch Linux) (preloaded format=pdflatex 2015.5.31)  7 JUN 2015 18:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Arch Linux) (preloaded format=pdflatex 2015.5.31)  8 JUN 2015 23:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -443,14 +443,14 @@ Package caption Info: End \AtBeginDocument code.
 <drone.jpg, id=1, 2744.0919pt x 2058.2496pt>
 File: drone.jpg Graphic file (type jpg)
  <use drone.jpg>
-Package pdftex.def Info: drone.jpg used on input line 32.
+Package pdftex.def Info: drone.jpg used on input line 34.
 (pdftex.def)             Requested size: 285.12267pt x 213.84563pt.
-LaTeX Font Info:    Try loading font information for U+msa on input line 33.
+LaTeX Font Info:    Try loading font information for U+msa on input line 35.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 33.
+LaTeX Font Info:    Try loading font information for U+msb on input line 35.
 
 (/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -458,56 +458,83 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <odroid.jpg, id=2, 501.875pt x 291.0875pt>
 File: odroid.jpg Graphic file (type jpg)
  <use odroid.jpg>
-Package pdftex.def Info: odroid.jpg used on input line 43.
+Package pdftex.def Info: odroid.jpg used on input line 45.
 (pdftex.def)             Requested size: 285.12267pt x 165.37971pt.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./drone.jpg>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 60.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 75.
 
 (/usr/share/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 60.
- [2 <./odroid.jpg>]
-<image_marked.jpg, id=15, 642.4pt x 481.8pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 75.
+ [2 <./odroid.jpg>] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+
+ []
+
+
+Overfull \hbox (18.04501pt too wide) in paragraph at lines 128--128
+ []\OT1/cmtt/m/n/10.95 img = image from drone camera, already binarized and fil
+tered[] 
+ []
+
+
+Overfull \hbox (58.28583pt too wide) in paragraph at lines 128--128
+ []\OT1/cmtt/m/n/10.95 surf = cv2.SURF(400) #400 is an adequate treshold accord
+ing to tests[] 
+ []
+
+
+Overfull \hbox (23.7937pt too wide) in paragraph at lines 128--128
+ []\OT1/cmtt/m/n/10.95 #skp contains the image keypoints, sd contains the descr
+iptors[] 
+ []
+
+<image_marked.jpg, id=17, 642.4pt x 481.8pt>
 File: image_marked.jpg Graphic file (type jpg)
  <use image_marked.jpg>
-Package pdftex.def Info: image_marked.jpg used on input line 91.
+Package pdftex.def Info: image_marked.jpg used on input line 139.
 (pdftex.def)             Requested size: 360.0pt x 270.00465pt.
 
-<template_marked.jpg, id=16, 596.2275pt x 421.575pt>
+<template_marked.jpg, id=18, 596.2275pt x 421.575pt>
 File: template_marked.jpg Graphic file (type jpg)
  <use template_marked.jpg>
-Package pdftex.def Info: template_marked.jpg used on input line 97.
+Package pdftex.def Info: template_marked.jpg used on input line 145.
 (pdftex.def)             Requested size: 360.0pt x 254.54225pt.
 
-<matches.jpg, id=17, 1238.6275pt x 481.8pt>
+[4] [5 <./image_marked.jpg> <./template_marked.jpg>]
+<matches.jpg, id=26, 1238.6275pt x 481.8pt>
 File: matches.jpg Graphic file (type jpg)
  <use matches.jpg>
-Package pdftex.def Info: matches.jpg used on input line 114.
+Package pdftex.def Info: matches.jpg used on input line 200.
 (pdftex.def)             Requested size: 360.0pt x 140.03453pt.
- [3] [4 <./image_marked.jpg> <./template_marked.jpg>] [5 <./matches.jpg>] [6] [
-7] [8]
-(./report.aux) ) 
+ [6] [7 <./matches.jpg>] [8] [9] [10] <tracking.jpg, id=43, 4143.48pt x 3107.61
+pt>
+File: tracking.jpg Graphic file (type jpg)
+
+<use tracking.jpg>
+Package pdftex.def Info: tracking.jpg used on input line 356.
+(pdftex.def)             Requested size: 356.40198pt x 267.29668pt.
+ [11] [12 <./tracking.jpg>] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 3711 strings out of 493109
- 52716 string characters out of 6140856
+ 3717 strings out of 493109
+ 52803 string characters out of 6140856
  116051 words of memory out of 5000000
- 7121 multiletter control sequences out of 15000+600000
+ 7126 multiletter control sequences out of 15000+600000
  9369 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,8n,38p,238b,431s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pf
-b></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/font
-s/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmtt10.pfb>
-Output written on report.pdf (8 pages, 1888789 bytes).
+ 38i,8n,38p,238b,433s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on report.pdf (12 pages, 2620859 bytes).
 PDF statistics:
- 56 PDF objects out of 1000 (max. 8388607)
- 35 compressed objects within 1 object stream
+ 65 PDF objects out of 1000 (max. 8388607)
+ 40 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
