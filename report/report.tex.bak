@@ -10,20 +10,22 @@
 \begin{document}
 \begin{center}
 Image Processing - Pattern recognition and drone controlling with OpenCV",
-Gabriel Hidasy, HIRWAAT.PTE
+Gabriel Hidasy, Science without Borders - CAPES\\
+Under supervision of Dr Adam Schiffer, University of Pécs - PMMIK\\
+\today
 \end{center}
 
 \section{The Problem}
-\paragraph {In} the context of this project a drone is an unmanned aerial
+\paragraph {} In the context of this project a drone is an unmanned aerial
 vehicle, capable of hover, particularly a Quad-copter.
-\paragraph {Drones} can be controlled remotely by a human or by an autonomous
+\paragraph {} Drones can be controlled remotely by a human or by an autonomous
 program,this project aims to produce a framework for controlling the drone from
 a computer and integrate it with a pattern recognition algorithm to follow the
 pattern in a room. This project does not aim to guarantee an stable flight
 but the modular nature of it makes it easy to integrate it in another program.
 
 \section{The equipment}
-\paragraph {The} quad-copter used in this project is a Parrot AR-Drone 2.0, the
+\paragraph {} The quad-copter used in this project is a Parrot AR-Drone 2.0, the
 drone has a front facing camera and is controlled by WiFi.
 \begin{figure}[hbtp]
   \centering
@@ -52,58 +54,147 @@ communicate through a web interface and do not need to be hosted in the same
 machine.
 \paragraph {} The controlling application is based in a NodeJS library that
 handles the low level communication, it exports a series of URLs that correspond
-to various functions of the drone.\\More then one application can access this
-API at a time, there are no security features implemented for now, but it
-would not be hard to add an authorization token.
+to various functions of the drone.\\
+The API is very high level and abstracts away details related to flight (for
+example, instead of dealing with the default coordinate system for aircrafts,
+[roll, pitch, yaw], which would require a very fine tunned propeller control
+(incidentaly making quadcopters almost impossible to flight without computer
+aid). Commands are given based on the drone current coordinate system, in a
+[X,Y,Z] frame centered in the middle of the drone, with the X axis pointing
+towards the camera, the Z axis beeing the altitude and the Y axis from left to
+right.\\
+The camera beeing positioned along the X axis is a great feature in controlling
+the drone both in First Person View flight and in controlling using images, as
+it permits a direct association between the position of objects in the image and
+the commands needed to move then to the center of the image (for example, if in
+the 640x360 image the point is in 100,300, we know the object is at left and
+below the drone) (0,0 beeing the top left corner and 640,360 the botton right)
+%Add a photo here, with the coordinates anotated
 \paragraph {} The functions available in the API are:
 \begin{itemize}
-\item takeoff
-\item land
-\item up ([speed, optional, default 0.5],[time, optional, default 500ms])
-\item down ([speed, optional, default 0.5],[time, optional, default 500ms])
-\item front ([speed, optional, default 0.5],[time, optional, default 500ms])
-\item back ([speed, optional, default 0.5],[time, optional, default 500ms])
-\item left ([speed, optional, default 0.5],[time, optional, default 500ms])
-\item right ([speed, optional, default 0.5],[time, optional, default 500ms])
-\item rotatel ([speed, optional, default 0.5],[time, optional, default 500ms])
-\item rotater ([speed, optional, default 0.5],[time, optional, default 500ms])
-\item stop
-\item flip
-\item img.jpg (This returns a jpg snapshot from the drone)
+\item takeoff\\Start propellers, and rise to about 1m.
+\item land\\Stop any movement, levels the drone and descend untill close the
+ground, then stop propellers.
+\item up ([speed, optional, default 0.5],[time, optional, default 500ms])\\
+This command makes the drone climb, increasing Z
+\item down ([speed, optional, default 0.5],[time, optional, default 500ms])\\
+This command makes the drone descend, decreasing Z
+\item front ([speed, optional, default 0.5],[time, optional, default 500ms])\\
+This command makes the drone lean in its front, making it move forward,
+increasing X.
+\item back ([speed, optional, default 0.5],[time, optional, default 500ms])\\
+This command makes the drone lean in its back, making it move backward,
+decreasing X.
+\item left ([speed, optional, default 0.5],[time, optional, default 500ms])\\
+This command makes the drone lean on its lean on its left side, making it move
+to the left, decreasing Y
+\item right ([speed, optional, default 0.5],[time, optional, default 500ms])\\
+This command makes the drone lean on its lean on its right side, making it move
+to the right, increasing Y
+\item rotatel ([speed, optional, default 0.5],[time, optional, default 500ms])\\
+This command makes the drone rotate counter-clockwise over Z
+\item rotater ([speed, optional, default 0.5],[time, optional, default 500ms])\\
+This command makes the drone rotate clockwise over Z
+\item stop\\
+This command levels the drone immediatly
+\item flip\\
+This command performs a flip, do not execute it near the ground, walls or other
+structures
+\item img.jpg\\
+This command returns a jpg snapshot from the drone
 \end{itemize}
 \paragraph {} The functions are exported by a Web API available by accessing
 the URL IP:8002/functionName. Parameters can be passed by GET or POST,
 eg: 127.0.0.1:8002/up?speed=0.8\&time=100
+\paragraph{} The speed parameter determines how much the drone will unbalance
+itself, beeing 1 the maximum supported value and 0 not tilting at all. Higher
+values lead to faster movements. The time parameter defines how long untill the
+drone stabilizes itself again.
+
+\paragraph {} More then one application can access this API at a time, there are
+no security features implemented for now, but it would not be hard to add an
+authorization token.
 
 \paragraph {} The pattern matching application is composed of:
 \begin{itemize}
   \item A SURF detector from OpenCV\\
+\begin{verbatim}
+	img = image from drone camera, already binarized and filtered
+	template = image of the template
+	surf = cv2.SURF(400) #400 is an adequate treshold according to tests
+	skp, sd = surf.detectAndCompute(img,None)
+	#skp contains the image keypoints, sd contains the descriptors
+	tkp, td = surf.detectAndCompute(template,None)
+\end{verbatim}
 SURF is responsible for finding key-points in an image. A key-point is a point
 in the image with some robust feature. A robust feature is a detail of an image
 that can be detected even if its scaled, rotated, or slightly deformed.\\
-The images bellow have their keypoints marked, the first one has a red cross
+The images bellow have their key-points marked, the first one has a red cross
 marking the position of the pattern in the image.
 \begin{figure}[hbtp]
   \centering
+SURF
 \begin{subfigure}{1.00\textwidth}
   \centering
   \includegraphics[width=1.0\linewidth]{image_marked.jpg}
+  The size of the circle indicates the confidence in the match, this circles are
+already filtered.
 \end{subfigure}
 \begin{subfigure}{1.00\textwidth}
   \centering
   \includegraphics[width=1.0\linewidth]{template_marked.jpg}
+  The template is a pair of triangles as well marked corners are easy to match.
 \end{subfigure}
 \end{figure}
-
-
-%Add a photo of the template and the points, with circles
-  \item A FLANN matcher from OpenCV\\
+\newpage
+\item A FLANN matcher from OpenCV\\
 FLANN is a smart algorithm to find matches in a set of data points, it was used
 in place of an exhaustive search because, despite not being as accurate, it is
 good enough and a lot faster, enabling the algorithm to run in a cheap ARM board
-with low power requirements.
+with low power requirements.\\
+This piece of code below runs OpenCV FLANN on both keypoint sets and find the
+best matches
+\begin{verbatim}
+    flann_params = dict(algorithm=1, trees=4)
+    flann = cv2.flann_Index(sd, flann_params)
+    idx, dist = flann.knnSearch(td, 1, params={})
+    del flann
+
+    dist = dist[:,0]/2500.0
+    dist = dist.reshape(-1,).tolist()
+    idx = idx.reshape(-1).tolist()
+    indices = range(len(dist))
+    indices.sort(key=lambda i: dist[i])
+    dist = [dist[i] for i in indices]
+    idx = [idx[i] for i in indices]
+    skp_final = []
+    for i, dis in itertools.izip(idx, dist):
+        if dis < distance:
+            skp_final.append(skp[i])
+
+    flann = cv2.flann_Index(td, flann_params)
+    idx, dist = flann.knnSearch(sd, 1, params={})
+    del flann
+
+    dist = dist[:,0]/2500.0
+    dist = dist.reshape(-1,).tolist()
+    idx = idx.reshape(-1).tolist()
+    indices = range(len(dist))
+    indices.sort(key=lambda i: dist[i])
+    dist = [dist[i] for i in indices]
+    idx = [idx[i] for i in indices]
+    tkp_final = []
+    for i, dis in itertools.izip(idx, dist):
+        if dis < distance:
+            tkp_final.append(tkp[i])
+
+    return skp_final, tkp_final
+
+
+\end{verbatim}
 \begin{figure}[hbtp]
   \centering
+FLANN
 \begin{subfigure}{1.00\textwidth}
   \centering
   \includegraphics[width=1.00\linewidth]{matches.jpg}
@@ -122,15 +213,18 @@ and right), and the size it appears to have (for front and back), at this
 iteration of the project the drone is set to move at only 30\% of its speed
 and move for 0.5s at a time.\\
 The drone stays still when no pattern is detected, in a future iteration it
-could be usefull to have the drone rotating or flying in circles, as it would
-increase the chance it would come accross the pattern changing the point of
+could be useful to have the drone rotating or flying in circles, as it would
+increase the chance it would come across the pattern changing the point of
 view.
 \end{itemize}
-
+\paragraph{} The application process a image in less then 50ms, but the rate is
+limited to 2Hz as its more then enough to control the drone and leave a lot of
+room for both improvements in this application and other applications running in
+the controller (as a flight stabilizer or a GPS tracker).
 
 \section{The Results}
 \paragraph {} In the following 3 pages a log of a test flight is included, it
-consistes of the output from the pattern matcher, to be read as:
+consists of the output from the pattern matcher, to be read as:
 \begin{itemize}
 \item Date
 \item Position (x,y) of the pattern and the geometry of the image
@@ -138,7 +232,8 @@ consistes of the output from the pattern matcher, to be read as:
 \end{itemize}
 \paragraph{} At this iteration the pattern matcher was not modulating the speed
 and time for each function. It was also not commanding the drone to go front or
-back.
+back as this section of the code is still not reliable enough for pure
+autonomous flight.
 \newpage
 \begin{verbatim}
 Wed May 13 14:18:04 CEST 2015
@@ -251,8 +346,17 @@ Wed May 13 14:18:39 CEST 2015
 (523, 200, (640,360))
 goright
 \end{verbatim}
-\newpage
 \paragraph{} As seen in the logs the drone correctly reacts to the commands
 sent, further advances need to be made in modulating the force of the response
 based in the position and distance of the target pattern.
+\begin{figure}[hbtp]
+  \centering
+\begin{subfigure}{.99\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{tracking.jpg}
+Example of the drone following a pattern
+\end{subfigure}
+\end{figure}
+
+
 \end{document}

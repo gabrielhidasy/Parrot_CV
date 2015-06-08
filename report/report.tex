@@ -56,24 +56,24 @@ machine.
 handles the low level communication, it exports a series of URLs that correspond
 to various functions of the drone.\\
 The API is very high level and abstracts away details related to flight (for
-example, instead of dealing with the default coordinate system for aircrafts,
-[roll, pitch, yaw], which would require a very fine tunned propeller control
-(incidentaly making quadcopters almost impossible to flight without computer
+example, instead of dealing with the default coordinate system for aircraft's,
+[roll, pitch, yaw], which would require a very fine tuned propeller control
+(incidentally making quad-copters almost impossible to flight without computer
 aid). Commands are given based on the drone current coordinate system, in a
 [X,Y,Z] frame centered in the middle of the drone, with the X axis pointing
-towards the camera, the Z axis beeing the altitude and the Y axis from left to
+towards the camera, the Z axis being the altitude and the Y axis from left to
 right.\\
-The camera beeing positioned along the X axis is a great feature in controlling
+The camera being positioned along the X axis is a great feature in controlling
 the drone both in First Person View flight and in controlling using images, as
 it permits a direct association between the position of objects in the image and
 the commands needed to move then to the center of the image (for example, if in
 the 640x360 image the point is in 100,300, we know the object is at left and
-below the drone) (0,0 beeing the top left corner and 640,360 the botton right)
+below the drone) (0,0 being the top left corner and 640,360 the bottom right)
 %Add a photo here, with the coordinates anotated
 \paragraph {} The functions available in the API are:
 \begin{itemize}
 \item takeoff\\Start propellers, and rise to about 1m.
-\item land\\Stop any movement, levels the drone and descend untill close the
+\item land\\Stop any movement, levels the drone and descend until close the
 ground, then stop propellers.
 \item up ([speed, optional, default 0.5],[time, optional, default 500ms])\\
 This command makes the drone climb, increasing Z
@@ -96,7 +96,7 @@ This command makes the drone rotate counter-clockwise over Z
 \item rotater ([speed, optional, default 0.5],[time, optional, default 500ms])\\
 This command makes the drone rotate clockwise over Z
 \item stop\\
-This command levels the drone immediatly
+This command levels the drone immediately
 \item flip\\
 This command performs a flip, do not execute it near the ground, walls or other
 structures
@@ -107,8 +107,8 @@ This command returns a jpg snapshot from the drone
 the URL IP:8002/functionName. Parameters can be passed by GET or POST,
 eg: 127.0.0.1:8002/up?speed=0.8\&time=100
 \paragraph{} The speed parameter determines how much the drone will unbalance
-itself, beeing 1 the maximum supported value and 0 not tilting at all. Higher
-values lead to faster movements. The time parameter defines how long untill the
+itself, being 1 the maximum supported value and 0 not tilting at all. Higher
+values lead to faster movements. The time parameter defines how long until the
 drone stabilizes itself again.
 
 \paragraph {} More then one application can access this API at a time, there are
@@ -121,9 +121,9 @@ authorization token.
 \begin{verbatim}
 	img = image from drone camera, already binarized and filtered
 	template = image of the template
-	surf = cv2.SURF(400) #400 is an adequate treshold according to tests
+	surf = cv2.SURF(400) #400 is an adequate threshold according to tests
 	skp, sd = surf.detectAndCompute(img,None)
-	#skp contains the image keypoints, sd contains the descriptors
+	#skp contains the image key-points, sd contains the descriptors
 	tkp, td = surf.detectAndCompute(template,None)
 \end{verbatim}
 SURF is responsible for finding key-points in an image. A key-point is a point
@@ -152,7 +152,7 @@ FLANN is a smart algorithm to find matches in a set of data points, it was used
 in place of an exhaustive search because, despite not being as accurate, it is
 good enough and a lot faster, enabling the algorithm to run in a cheap ARM board
 with low power requirements.\\
-This piece of code below runs OpenCV FLANN on both keypoint sets and find the
+This piece of code below runs OpenCV FLANN on both key-point sets and find the
 best matches
 \begin{verbatim}
     flann_params = dict(algorithm=1, trees=4)
