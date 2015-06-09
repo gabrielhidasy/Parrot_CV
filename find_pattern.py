@@ -7,15 +7,6 @@ import os
 from time import sleep
 
 def findKeyPoints(img, template, distance=200):
-    #detector
-    #detector = cv2.FeatureDetector_create("SIFT")
-    #descriptor = cv2.DescriptorExtractor_create("SIFT")
-
-    #skp = detector.detect(img)
-    #skp, sd = descriptor.compute(img, skp)
-
-    #tkp = detector.detect(template)
-    #tkp, td = descriptor.compute(template, tkp)
     surf = cv2.SURF(400)
     skp, sd = surf.detectAndCompute(img,None)
     tkp, td = surf.detectAndCompute(template,None)
