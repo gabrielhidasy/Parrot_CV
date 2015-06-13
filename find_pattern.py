@@ -3,6 +3,7 @@ import cv2
 import urllib
 import numpy as np
 import itertools
+import datetime
 import os
 from time import sleep
 
@@ -146,7 +147,7 @@ def match():
     #print(dist,x,y)
     cx = int(sum(x)/len(x))
     cy = int(sum(y)/len(y))
-    os.system("date")
+    print(str(datetime.datetime.now().time())[:-4])
     print(cx,cy,newimg.shape)
     if cx < newimg.shape[1]/2-50:
         print('goleft')
@@ -177,7 +178,7 @@ def match():
     cv2.imshow('matches', matches)
     if cv2.waitKey() & 0xff == 27: return
     sleep(0.5)
-match()
+os.system("date")
 while True:
     try:
         match()
